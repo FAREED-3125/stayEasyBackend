@@ -44,7 +44,7 @@ mongoose
     console.log(err);
   });
 
-  const whiteList = ["http://localhost:3000","https://65071fbb08aa414d97900a3f--cheerful-frangollo-474302.netlify.app","https://stay-easy.vercel.app"];
+  const whiteList = ["http://localhost:3000","https://65071fbb08aa414d97900a3f--cheerful-frangollo-474302.netlify.app","https://stay-easy.vercel.app","https://stay-easy-app.vercel.app"];
   //middleWares
 
 app.use((req, res, next) => {
@@ -52,18 +52,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (whiteList.includes(origin) ) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Cors Error"));
-//       }
-//     },
-//     optionsSuccessStatus: 200,
-//   })
-// );
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (whiteList.includes(origin) ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Cors Error"));
+      }
+    },
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/Auth", AuthRouter);
