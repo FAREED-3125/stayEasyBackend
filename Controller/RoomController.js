@@ -74,17 +74,17 @@ const AddRoom = async (request,response,next) => {
 }
 }
 
-// //Updating Single Room
-// const UpdateSingleRoom = async (request,response,next) => {
-//   const roomid = request.params.roomid;
-//   const id = request.params.id;
-//   try {
-//     const room = await Room.updateRoomsingle(id,roomid,request.body);
-//     response.status(200).json(room);
-//   } catch (err) {
-//     next(createErr(500, err.message));
-//   }
-// }
+//Updating Single Room
+const UpdateSingleRoom = async (request,response,next) => {
+  const roomid = request.params.roomid;
+  const id = request.params.id;
+  try {
+    const room = await Room.updateRoomsingle(id,roomid,request.body);
+    response.status(200).json(room);
+  } catch (err) {
+    next(createErr(500, err.message));
+  }
+}
 
 
 //Getting all rooms
@@ -101,20 +101,33 @@ catch(err){
 
 //Update Room numbers
 const UpdateRoomNumber = async (request,response,next) => {
-  const roomid = request.params.id;
-  const {body} = request
+  const roomid = request.body.roomid;
+   const unavailable = request.body.unavailable
+  //  console.log({roomid,unavailable})
   try {
-    // const room = await Room.updateRoom(roomid,request.body); 
-     console.log(body)
-    // response.status(201).json(room);
-     const room = await Room.findOneAndUpdate(
-      { 'Room_number._id': roomid },
-      { $push: { 'Room_number.$.unavailable': { $each: body.body } } },
-      { new: true }
-    );
+  
+roomid.map(async (ro )=> {
+  const query = {
+  Room_number: {
+    $elemMatch: {
+      _id: ro
+    }
+  }
+};
+
+const update = {
+  $push: {
+    "Room_number.$.unavailable": { $each: unavailable }
+  }
+};
+
+const roomno = await Room.updateMany(query, update);
+})
+
+
+response.status(200).json("Updated Successfully")
+
    
-    
-     response.status(200).json(room); 
 
   } catch (err) {
     next(createErr(500, err.message));
@@ -124,20 +137,34 @@ const UpdateRoomNumber = async (request,response,next) => {
 
 //Delete Room number
 const DeleteRoomNumber = async (request, response, next) => {
-  const roomid = request.params.id;
-  const { body } = request;
+  console.log(request.body)
+  const roomid = request.body.roomid;
+   const unavailable = request.body.unavailable
   try {
-    const room = await Room.findOneAndUpdate(
-      { 'Room_number._id': roomid },
-      { $pull: { 'Room_number.$.unavailable': { $in: body.body } } }, // Use $in to match multiple elements
-      { new: true }
-    );
-
-    if (!room) {
+    roomid.map(async (ro )=> {
+      const query = {
+      Room_number: {
+        $elemMatch: {
+          _id: ro
+        }
+      }
+    };
+    
+    const update = {
+      $pull: {
+        "Room_number.$.unavailable": { $in: unavailable }
+      }
+    };
+    
+    const roomno = await Room.updateMany(query, update);
+    if (!roomno) {
       return response.status(404).json({ message: 'Room not found' });
     }
+    })
+    
 
-    response.status(200).json(room);
+
+    response.status(200).json("Delete successfull");
   } catch (err) {
     next(createErr(500, err.message));
   }
@@ -153,6 +180,6 @@ module.exports = {
   GetRooms,
   FindManyRooms,
   UpdateRoomNumber,
-  DeleteRoomNumber
-  // UpdateSingleRoom
+  DeleteRoomNumber,
+   UpdateSingleRoom
 };

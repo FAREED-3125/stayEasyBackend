@@ -19,7 +19,7 @@ router.get('/',verifyAdmin,GetRooms);
 router.post('/create/:id',verifyAdmin,RoomRegister);
 
 //Update Room
-router.put('/update/:id',verifyAdmin,UpdateRoomNumber);
+router.put('/update/:id',verifyAdmin,UpdateRoom);
 
 //add Room
 router.put('/addRoom/:id',verifyAdmin,AddRoom);
@@ -28,14 +28,15 @@ router.put('/addRoom/:id',verifyAdmin,AddRoom);
 router.delete('/deleteRoom/:hotelid/:id',DeleteRoom)
 
 //update SingleROom
-// router.put('/updateSRoom/:roomid/:id',UpdateSingleRoom)
+router.put('/updateSingleRoom/:roomid/:id',UpdateSingleRoom)
+
 router.post('/FindRooms',FindManyRooms);
 
 //Update Room Number
-router.put('/upRoom/:id',UpdateRoomNumber)
+router.put('/upRoomnumber',UpdateRoomNumber)
 
 
 //Delete Room number
-router.put('/deleteRoomno/:id',DeleteRoomNumber)
+router.put('/deleteRoomno',DeleteRoomNumber)
 
 module.exports = router;

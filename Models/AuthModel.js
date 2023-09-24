@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Bookings = require('../Models/BookingModel')
 
 //validator imports
 
@@ -27,6 +28,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    bookings: {
+      type: [String],
+      ref: Bookings
+    }
   },
   { timestamps: true }
 );

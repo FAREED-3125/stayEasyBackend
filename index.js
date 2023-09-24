@@ -16,6 +16,7 @@ const userRouter = require("./Routes/User.js");
 const hotelRouter = require("./Routes/Hotel.js");
 const roomRouter = require("./Routes/Rooms.js");
 const ReviewRouter = require('./Routes/review.js');
+const BookingRouter = require('./Routes/booking');
 //dot env declaration
 const env = require("dotenv");
 env.config();
@@ -43,8 +44,8 @@ mongoose
     console.log(err);
   });
 
-const whiteList = ["http://localhost:3000"];
-//middleWares
+  const whiteList = ["http://localhost:3000","https://65071fbb08aa414d97900a3f--cheerful-frangollo-474302.netlify.app","https://stay-easy.vercel.app"];
+  //middleWares
 
 app.use((req, res, next) => {
   console.log(req.path);
@@ -70,6 +71,7 @@ app.use("/api/Users", userRouter);
 app.use("/api/Hotels", hotelRouter);
 app.use("/api/Rooms", roomRouter);
 app.use('/api/Review',ReviewRouter);
+app.use('/api/bookings',BookingRouter)
 
 app.use((error, request, response, next) => {
   response.status(error.status || 500).json({

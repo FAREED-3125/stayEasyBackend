@@ -43,8 +43,9 @@ const userLogin = async (request, response, next) => {
     const ispasscorrect = await bcrypt.compare(body.password, user.password);
     if (!ispasscorrect)
      return next(createErr(402, "Invalid password."));
-    const { _id, password, isAdmin, ...otherDetails } = user._doc;
-    const token = jwt.sign({ _id, isAdmin }, process.env.jwt);
+    const {password, isAdmin,bookings, ...otherDetails } = user._doc;
+    const {_id} = otherDetails;
+    const token = jwt.sign({_id, isAdmin }, process.env.jwt);
     response
       .cookie("access_token", token, {
         httpOnly: true,
@@ -52,6 +53,7 @@ const userLogin = async (request, response, next) => {
       .status(200)
       .json(otherDetails);
   } catch (err) {
+    console.log(err.message)
     next(createErr(500, "Something Wrong"));
   }
 };

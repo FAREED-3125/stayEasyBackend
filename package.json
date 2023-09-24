@@ -1,5 +1,5 @@
 {
-
+  "proxy": "http://localhost:8500/api",
   "name": "server",
   "version": "1.0.0",
   "description": "",

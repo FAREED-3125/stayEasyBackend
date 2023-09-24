@@ -52,7 +52,7 @@ const Deleteuser = async (request, response, next) => {
 const Getuser = async (request, response, next) => {
   try {
     const { id } = request.params;
-    await User.findById(id).then((resp) => {
+    await User.findById(id).populate('bookings').then((resp) => {
       response.status(200).json(resp);
     });
   } catch (err) {
